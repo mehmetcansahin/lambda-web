@@ -7,7 +7,7 @@ use core::convert::TryFrom;
 use core::future::Future;
 use lambda_runtime::{
     run as lambda_runtime_run, Context as LambdaContext, Error as LambdaError,
-    Handler as LambdaHandler,
+    Service as LambdaService,
 };
 use std::cell::RefCell;
 use std::convert::Infallible;
@@ -126,7 +126,7 @@ where
     B: hyper::body::HttpBody,
     <B as hyper::body::HttpBody>::Error: std::error::Error + Send + Sync + 'static;
 
-impl<S, B> LambdaHandler<LambdaHttpEvent<'_>, serde_json::Value> for HyperHandler<S, B>
+impl<S, B> LambdaService<LambdaHttpEvent<'_>, serde_json::Value> for HyperHandler<S, B>
 where
     S: hyper::service::Service<HyperRequest, Response = HyperResponse<B>, Error = Infallible>
         + 'static,
